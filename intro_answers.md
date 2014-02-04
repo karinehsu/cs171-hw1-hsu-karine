@@ -1,6 +1,6 @@
 1. If we were interested in understanding summary statistics at a glance (minimum, maximum, etc.), how could you improve the display of the table?
 
-We could either display the summary statistics in a labeled boxplot or we could add rows into the table or add another table on the side that display the desired summary statistics, like mean, median, minimum, etc.
+We could either display the summary statistics in a labeled boxplot or we could add rows above the headers that display the desired summary statistics, like mean, median, minimum, etc.
 
 
 2. Find three varied examples on the web that present tabular data in a different layout or in more visually compelling, complete, interactive or interesting ways.
