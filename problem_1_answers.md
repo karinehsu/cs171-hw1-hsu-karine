@@ -1,6 +1,6 @@
 1. What does the colspan="3" attribute of the <th> node do?
 
-The colspan attribute makes the table's header cells (<th>) span 3 columns.
+The colspan attribute makes the table's header cells span 3 columns.
 
 2. List all the styles (e.g. border width, text alignment, etc.) applied to the th element containing "Rank". For each, state whether they are set as an HTML attribute or a CSS style and describe them in a few words. Include only styles directly applied to the element, not styles inherited/cascading from parent elements or styles from the default user agent stylesheet. Exclude overwritten styles. For HTML attributes, state the CSS equivalent.
 
