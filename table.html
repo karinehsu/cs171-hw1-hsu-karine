@@ -5,22 +5,136 @@
   <title>CS171 Homework 1</title>
 
   <style type="text/css">
-  /* YOUR CSS */
+  /* YOUR CSS how to make first header bold*/
+
+  table, th, td{
+    border: 1px solid black;
+    border-spacing: 0px;
+  }
+  body *{
+    line-height: 1.22em;
+  }
+
+
+  #caption{
+    color: blue;
+    text-align: center;
+  }
+  
+  .main-content td, .main-content th{
+    padding: 0px;
+  }
+  th{
+    padding: 3px;
+    font-weight: bold;
+    
+  } 
+  cursor
+  {
+    cursor: s-resize;
+  }
+
   </style>
 </head>
 <body>
+
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script>
-  d3.text("unemp_states_us_nov_2013.tsv", function(error, data){
+  
+  d3.text("unemp_states_us_nov_2013.tsv", function(error, text){
+      
+      d3.select("body")
+      .append("h1")
+      .html("Unemployment Rates for States");
 
-      var table = d3.select("body").append("table"),
+      var table = d3.select("body").append("table")
+      .append("class", "main-content"),
+      thead = table.append("thead"),
       tbody = table.append("tbody");
 
+      //set caption
+
+      d3.select("thead")
+      .append("tr")
+      .append("caption")
+      .attr("id", "caption")
+      .html("Unemployment Rates for States Monthly Rankings Seasonally Adjusted" + "</br>" + "Dec 2013");
+
+
+      var data = d3.tsv.parseRows(text);
+      var header_data = data.shift();
+
+      // zebra rows
+      var horse_with_stripes = function(d,i){
+        if (i%2==0){
+          return "#c4c4c4";
+        } 
+        else{
+          return "fff";
+        }
+      };
+      // append headers to table
+      thead.selectAll("th")
+      .data(header_data)
+      .enter()
+      .append("th")
+      .attr("id","headers")
+      .text(function(data){return data; })
+
+    //Click on header to sort
+
+    .on("click", function(d, j){
+      var i = 0;
+      // check index value in header data
+      for (; i < header_data.length; i++)
+      {
+        if (header_data[i] == d)
+          break;
+      }
+      //sort based on index  
+      tbody.selectAll("tr").sort(function(a, b) {
+        if(d3.ascending(a[i], b[i])!=0)
+          return d3.ascending(a[i],b[i]);
+        else
+          return d3.ascending(a[1],b[1])
+      })
+
+      // ensure zebra rows are ok 
+      .style("background-color", horse_with_stripes)
+
+    })
+
+    //cursor change and counter
+    .on("mouseover",function(d,i){
+      
+    });
+
+      //creates a row for each object in tsv file
       var rows = tbody.selectAll("tr")
       .data(data)
       .enter()
-      .append("tr");
+      .append("tr")
+      .style("background-color", horse_with_stripes)
+      // mousover makes cells highlight yellow
+      .on("mouseover", function(d){
+        d3.select(this).style("background-color", "yellow");
+      })
+      .on("mouseout", function(d,i){ 
+        d3.select(this).style("background-color", function(d2) {
+       
+        if (i % 2 === 0){
+           return "#c4c4c4";
+         }
+        else {
+           return "#fff";
+         }
+      } )
+ 
+      });
+      
 
+
+      // create cell in each row for each column
       var cells = rows.selectAll("td")
       .data(function(row) {
         return d3.range(Object.keys(row).length).map(function(column, i) {
@@ -31,6 +145,21 @@
       .append("td")
       .text(function(d) { return d; });
       });
+
+   
+       //adds an extra column HELP WITH THIS
+      
+      /*
+    rows.insert("td").append("svg")
+   .attr("width", "50")
+   .attr("height", "50")
+   .append("rect")
+   .attr("height", "50")
+   .attr("width", function(d) { return parseFloat(d[0]); }); */
+      
+
+    
+
   </script>
 </body>
 </html>
