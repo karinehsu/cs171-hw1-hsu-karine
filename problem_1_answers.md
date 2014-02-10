@@ -12,6 +12,7 @@ CSS styles:
 padding: 3px; Padding makes an area around the content of an element within a border to 3 pixels.
 line-height: 1.22em; This specifies the line height to 1.22 em. 
 margin: 0; The margin makes an area around the content of an element outside the border to 0. 
+text-align: -webkit-center. align="center" is the HTML attribute. 
 
 
 3. What differences do you notice between the DOM inspector and the HTML source? Why would you use the DOM inspector? Why is the HTML source useful?
