@@ -1,6 +1,5 @@
 1. The domain() function is the data range upon which the scale is calculated. What does d3.selectAll("tbody tr")[0].length-1 mean?
 
-
 d3.selectAll("tbody tr") first selects all the table rows in the table's body and gives it to us in an array. The [0] allows us to access the HTML elements associated with the rows. The .length -1 returns the index of the last element in the array.  
 
 2. Add the snippet in your code. Describe, in words, what the following function calls return: color(0), color(10) and color(150)?
