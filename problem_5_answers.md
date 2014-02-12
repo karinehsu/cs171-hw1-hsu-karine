@@ -8,3 +8,4 @@ A g element is used for grouping elements for the chart. The first g element set
 
 3. Complete the implementation section below. Is there any consequence if you add the text elements before or after the rect elements? Why?
 
+If I add the text elements before the rect elements, the rectangles will be laid out on top of the text elements. If the text elements are added after the rect elements, the rectangles are laid out first, and then the text is laid out on top of it. 
