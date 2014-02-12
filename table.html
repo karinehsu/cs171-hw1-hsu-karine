@@ -5,20 +5,26 @@
   <title>CS171 Homework 1</title>
 
   <style type="text/css">
-  /* YOUR CSS how to make first header bold*/
+  /* YOUR CSS*/
 
   table, th, td{
     border: 1px solid black;
     border-spacing: 0px;
   }
+
+  h1{
+    text-align: center;
+  }
   body *{
+    margin: 0px auto;
     line-height: 1.22em;
   }
-
 
   #caption{
     color: blue;
     text-align: center;
+    padding: 3px;
+    border: solid black 1px;
   }
   
   .main-content table{
@@ -30,6 +36,7 @@
   th{
     padding: 3px;
     font-weight: bold;
+
     
   } 
   .ascending_cursor
@@ -37,7 +44,6 @@
     cursor: n-resize;
   }
   .descending_cursor
-  cursor
   {
     cursor: s-resize;
   }
@@ -61,12 +67,9 @@
       tbody = table.append("tbody");
 
       //set caption
-
-      d3.select("thead")
-      .append("tr")
-      .append("caption")
-      .attr("id", "caption")
-      .html("Unemployment Rates for States Monthly Rankings Seasonally Adjusted" + "</br>" + "Dec 2013");
+      table.append("caption")
+      .html("Unemployment Rates for States Monthly Rankings Seasonally Adjusted" + "</br>" + "Dec 2013")
+      .attr("id","caption");
 
 
       var data = d3.tsv.parseRows(text);

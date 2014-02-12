@@ -10,9 +10,15 @@
     text {
         font: 10px sans-serif;
     }
+    #title {
+        font: 18px sans-serif;
+        font-weight: bold;
+    }
   </style>
 </head>
 <body>
+  <label><input type="radio" name="order" value="state"> State</label>
+  <label><input type="radio" name="order" value="rate" checked> Rate</label>
   <script type="text/javascript">
 
     var margin = {top: 50, bottom: 10, left:300, right: 40};
@@ -32,6 +38,7 @@
 
     var g = svg.append("g")
       .attr("transform", "translate("+margin.left+","+margin.top+")");
+   
 
     d3.tsv("unemp_states_us_nov_2013.tsv", function(data) {
 
@@ -41,6 +48,9 @@
       xScale.domain([min, max]);
       yScale.domain(data.map(state));
 
+      // reorder function
+      var reorder = d3.selectAll(this)FINISH THIS
+
       var groups = g.append("g")
         .selectAll("g")
         .data(data)
@@ -48,10 +58,35 @@
         .append("g")
         .attr("transform", function(d, i) { return "translate(0, " + yScale(d.State) +")"; });
 
+      // add title 
+      var title = g
+      .append("text")
+      .attr("id","title")
+      .text("Unemployment Rates for States");  
+
       var bars = groups
         .append("rect")
         .attr("width", function(d) { return xScale(d.Rate); })
         .attr("height", bar_height);
+
+
+      // add rank values  
+      groups.append("text")
+        .attr("x", function(d) { return xScale(d.Rate); })
+        .attr("y", function(d) { return bar_height/2; })
+        .text(function(d) { return d.Rate; })  
+        .attr("dx", function(d){ return (this.getBBox().width * -1) - 5; })
+        .attr("dy",".2em");
+
+      //add state names
+      groups.append("text")
+        .attr("x", function(d) { return 0; })
+        .attr("y", function(d) { return bar_height/2; })
+        .text(function(d) { return d.State; })  
+        .attr("dx", function(d){ return (this.getBBox().width * -1) - 5; })
+        
+      d3.selectAll("input")
+      .on("change",reorder);
 
     });
   </script>
