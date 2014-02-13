@@ -11,7 +11,7 @@
         font: 10px sans-serif;
     }
     #title {
-        font: 18px sans-serif;
+        font: 16px sans-serif;
         font-weight: bold;
     }
   </style>
@@ -27,6 +27,7 @@
 
     var xScale = d3.scale.linear().range([0, width]);
     var yScale = d3.scale.ordinal().rangeRoundBands([0, height], .8, 0);
+    var yScale_1 = d3.scale.ordinal().rangeRoundBands([0, height], .8, 0);
 
     var bar_height = 15;
 
@@ -44,6 +45,8 @@
 
       var max = d3.max(data, function(d) { return d.Rate; } );
       var min = 0;
+      var state_counter = 0;
+      var rate_counter = 0;
 
       xScale.domain([min, max]);
       yScale.domain(data.map(state));
@@ -71,7 +74,7 @@
       groups.append("text")
         .attr("x", function(d) { return xScale(d.Rate); })
         .attr("y", function(d) { return bar_height/2; })
-        .text(function(d) { return d.Rate; })  
+        .text(function(d) { return d.Rank; })  
         .attr("dx", function(d){ return (this.getBBox().width * -1) - 5; })
         .attr("dy",".2em");
 
@@ -87,41 +90,55 @@
         //check button pressed 
         var button = this.value;
 
-        console.log(data);
-        data.sort(function(a, b) {
-          // State value button clicked
-          if (button == "Rate"){
+          
+          if (button == "state"){
             // sort by ascending value clicked
-            if(d3.ascending(a.Rate, b.Rate)!=0)
-              return d3.ascending(a.Rate,b.Rate);
-            else
-              return d3.ascending(a.State,b.State);
+            state_counter++;
+              if (state_counter % 2 == 1){
+                sortedData = data.sort(function(a,b){
+                return d3.ascending(a.State,b.State);
+              })}
+              else{
+                sortedData = data.sort(function(a,b){
+                return d3.descending(a.State,b.State);
+              })}
+              
+
           }
-          // set in descending order 
           else{
-            if(d3.ascending(a.State, b.State)!=0)
-              return d3.descending(a.State,b.State);
-            else
-              return d3.descending(a.Rate,b.Rate);
+            rate_counter++;
+              if (rate_counter % 2 == 1){
+                sortedData = data.sort(function(a,b){
+                if(a.Rate != b.Rate)
+                  return d3.ascending(a.Rate,b.Rate);
+                else
+                  return d3.ascending(a.State,b.State);
+              })}
+              else{ 
+                sortedData = data.sort(function(a,b){
+                if(a.Rate != b.Rate)
+                  return d3.descending(a.Rate,b.Rate)
+                else
+                  return d3.descending(a.State,b.State);
+              })}   
           }
-        });
 
-        console.log(data);
+        console.log(sortedData);
+        yScale_1.domain(sortedData.map(state));
 
-      };
-
-      // shuffle bars upon click
-      d3.selectAll("input")
-      .on("change",reorder);
-      console.log(reorder());
-
-      // shuffle bars
-      bars
+      groups
       .transition()
       .duration(750)
       .delay(function(d, i) { return i * 10; })
-      .attr("transform", function(d, i) { return "translate("+ data.Rate +", "+ data.State +")"; }); 
+      .attr("transform", function(d, i) { return "translate(0, "+ yScale_1(d.State) +")"; })
+      };
+
+      // shuffle bars upon click
+      d3.selectAll("input").on("click",reorder);
+
+
     //end of reorder function
+
       //order bar charts  
 
      // find min and max values of rate column        
@@ -131,6 +148,10 @@
      var max = d3.max(data,function(d){
        return Math.max(d.Rate);
      });
+
+      // shuffle bars
+      xScale.domain([min, max]);
+      yScale.domain(data.map(state));
 
      // color scale for bars
       var color = d3.scale.linear()
