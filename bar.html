@@ -58,7 +58,7 @@
         .append("g")
         .attr("transform", function(d, i) { return "translate(0, " + yScale(d.State) +")"; });
 
-      // add title 
+      // add title to page 
       var title = g
       .append("text")
       .attr("id","title")
@@ -85,61 +85,58 @@
         .text(function(d) { return d.State; })  
         .attr("dx", function(d){ return (this.getBBox().width * -1) - 5; });
       
-      // reorder function
+      // reorder/sorting function
       var reorder = function(){
         //check button pressed 
         var button = this.value;
 
           
-          if (button == "state"){
-            // sort by ascending value clicked
-            state_counter++;
-              if (state_counter % 2 == 1){
-                sortedData = data.sort(function(a,b){
+        if (button == "state"){
+          // sort by ascending value clicked
+          state_counter++;
+            if (state_counter % 2 == 1){
+              sortedData = data.sort(function(a,b){
+              return d3.ascending(a.State,b.State);
+            })}
+            else{
+              sortedData = data.sort(function(a,b){
+              return d3.descending(a.State,b.State);
+            })}
+            
+
+        }
+        else{
+          rate_counter++;
+            if (rate_counter % 2 == 1){
+              sortedData = data.sort(function(a,b){
+              if(a.Rate != b.Rate)
+                return d3.ascending(a.Rate,b.Rate);
+              else
                 return d3.ascending(a.State,b.State);
-              })}
-              else{
-                sortedData = data.sort(function(a,b){
+            })}
+            else{ 
+              sortedData = data.sort(function(a,b){
+              if(a.Rate != b.Rate)
+                return d3.descending(a.Rate,b.Rate)
+              else
                 return d3.descending(a.State,b.State);
-              })}
-              
+            })}   
+        }
 
-          }
-          else{
-            rate_counter++;
-              if (rate_counter % 2 == 1){
-                sortedData = data.sort(function(a,b){
-                if(a.Rate != b.Rate)
-                  return d3.ascending(a.Rate,b.Rate);
-                else
-                  return d3.ascending(a.State,b.State);
-              })}
-              else{ 
-                sortedData = data.sort(function(a,b){
-                if(a.Rate != b.Rate)
-                  return d3.descending(a.Rate,b.Rate)
-                else
-                  return d3.descending(a.State,b.State);
-              })}   
-          }
-
-        console.log(sortedData);
+        // remap new yScale based on sorted data
         yScale_1.domain(sortedData.map(state));
 
-      groups
-      .transition()
-      .duration(750)
-      .delay(function(d, i) { return i * 10; })
-      .attr("transform", function(d, i) { return "translate(0, "+ yScale_1(d.State) +")"; })
+        //translate bars to correct position
+        groups
+        .transition()
+        .duration(750)
+        .delay(function(d, i) { return i * 10; })
+        .attr("transform", function(d, i) { return "translate(0, "+ yScale_1(d.State) +")"; })
       };
 
-      // shuffle bars upon click
+      // shuffle bars upon click of button
       d3.selectAll("input").on("click",reorder);
 
-
-    //end of reorder function
-
-      //order bar charts  
 
      // find min and max values of rate column        
      var min = d3.min(data, function(d){
@@ -149,7 +146,6 @@
        return Math.max(d.Rate);
      });
 
-      // shuffle bars
       xScale.domain([min, max]);
       yScale.domain(data.map(state));
 
@@ -163,7 +159,6 @@
       d3.selectAll("rect").style("fill", function(d,i){
         return color(d.Rate);
     });
-  
 
     });
   </script>
